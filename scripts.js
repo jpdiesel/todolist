@@ -14,6 +14,12 @@ function selectTask(event) {
   event.target.classList.toggle('selected');
 }
 
+function removeTask(event) {
+  const taskToRemove = event.target.closest('.task-item');
+  taskList.removeChild(taskToRemove);
+}
+
 
 createNewTask.addEventListener('click', addNewTask);
 taskList.addEventListener('click', selectTask);
+taskList.addEventListener('dblclick', removeTask);
