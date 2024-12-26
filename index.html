@@ -20,6 +20,9 @@
      <button id="suggest-task">Sugestão de Tarefa</button>
      <ol id="task-list">
      </ol>
-     <script type="module" src="scripts.js"></script>
+     <script type="module">
+      import { initializeTodoList } from './scripts.js';
+      document.addEventListener('DOMContentLoaded', initializeTodoList);
+    </script>
   </body>
 </html>

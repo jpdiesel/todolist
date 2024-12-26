@@ -1,38 +1,55 @@
 import { getSuggestions } from './utils/api.js';
 import { getFromLocalStorage, saveOnLocalStorage, removeFromLocalStorage } from './utils/localStorage.js';
 
-const taskInput = document.getElementById('task-text');
-const taskList = document.getElementById('task-list');
-const createNewTask = document.getElementById('create-task');
-const deleteAllButton = document.getElementById('delete-all');
-const suggestionButton = document.getElementById('suggest-task');
+export function initializeTodoList() {
+  const taskList = document.getElementById('task-list');
+  const createNewTask = document.getElementById('create-task');
+  const deleteAllButton = document.getElementById('delete-all');
+  const suggestionButton = document.getElementById('suggest-task');
 
-function addNewTask() {
+  createNewTask.addEventListener('click', addNewTask);
+  taskList.addEventListener('click', selectTask);
+  taskList.addEventListener('dblclick', removeTask);
+  deleteAllButton.addEventListener('click', removeAllTasks);
+  suggestionButton.addEventListener('click', suggestTask);
+
+  populateOnLoad();
+}
+export function addNewTask() {
+  const taskInput = document.getElementById('task-text');
+  const taskList = document.getElementById('task-list');
   const newTask = document.createElement('li');
+  // console.log(taskInput.value);
   newTask.classList.add('task-item');
   taskList.appendChild(newTask);
   newTask.innerText = taskInput.value;
-  taskInput.value = '';
   saveOnLocalStorage(taskList);
+  taskInput.value = '';
+  console.log(taskList.children);
+  console.log(newTask)
 }
 
-function selectTask(event) {
+export function selectTask(event) {
+  const taskList = document.getElementById('task-list');
   event.target.classList.toggle('selected');
   saveOnLocalStorage(taskList);
 }
 
-function removeTask(event) {
+export function removeTask(event) {
   const taskToRemove = event.target.closest('.task-item');
+  const taskList = document.getElementById('task-list');
   taskList.removeChild(taskToRemove);
   saveOnLocalStorage(taskList);
 }
 
-function removeAllTasks() {
+export function removeAllTasks() {
+  const taskList = document.getElementById('task-list');
   taskList.innerHTML = '';
   removeFromLocalStorage();
 }
 
-async function suggestTask() {
+export async function suggestTask() {
+  const taskList = document.getElementById('task-list');
   const suggestions = await getSuggestions();
   const randomSuggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
   const newTask = document.createElement('li');
@@ -42,18 +59,14 @@ async function suggestTask() {
   saveOnLocalStorage(taskList);
 }
 
-function populateOnLoad() {
+export function populateOnLoad() {
+  const taskList = document.getElementById('task-list');
   const savedTasks = getFromLocalStorage();
   if (savedTasks) {
     taskList.innerHTML = savedTasks;
   }
 }
 
-
-createNewTask.addEventListener('click', addNewTask);
-taskList.addEventListener('click', selectTask);
-taskList.addEventListener('dblclick', removeTask);
-deleteAllButton.addEventListener('click', removeAllTasks);
-suggestionButton.addEventListener('click', suggestTask);
-
-window.onload = populateOnLoad
+if (typeof window !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', initializeTodoList);
+}
