@@ -1,4 +1,5 @@
 import { getSuggestions } from './utils/api.js';
+import { getFromLocalStorage, saveOnLocalStorage, removeFromLocalStorage } from './utils/localStorage.js';
 
 const taskInput = document.getElementById('task-text');
 const taskList = document.getElementById('task-list');
@@ -12,19 +13,23 @@ function addNewTask() {
   taskList.appendChild(newTask);
   newTask.innerText = taskInput.value;
   taskInput.value = '';
+  saveOnLocalStorage(taskList);
 }
 
 function selectTask(event) {
   event.target.classList.toggle('selected');
+  saveOnLocalStorage(taskList);
 }
 
 function removeTask(event) {
   const taskToRemove = event.target.closest('.task-item');
   taskList.removeChild(taskToRemove);
+  saveOnLocalStorage(taskList);
 }
 
 function removeAllTasks() {
   taskList.innerHTML = '';
+  removeFromLocalStorage();
 }
 
 async function suggestTask() {
@@ -34,6 +39,14 @@ async function suggestTask() {
   newTask.classList.add('task-item');
   taskList.appendChild(newTask);
   newTask.innerText = randomSuggestion.title;
+  saveOnLocalStorage(taskList);
+}
+
+function populateOnLoad() {
+  const savedTasks = getFromLocalStorage();
+  if (savedTasks) {
+    taskList.innerHTML = savedTasks;
+  }
 }
 
 
@@ -42,3 +55,5 @@ taskList.addEventListener('click', selectTask);
 taskList.addEventListener('dblclick', removeTask);
 deleteAllButton.addEventListener('click', removeAllTasks);
 suggestionButton.addEventListener('click', suggestTask);
+
+window.onload = populateOnLoad
