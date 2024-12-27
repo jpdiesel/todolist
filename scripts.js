@@ -19,14 +19,11 @@ export function addNewTask() {
   const taskInput = document.getElementById('task-text');
   const taskList = document.getElementById('task-list');
   const newTask = document.createElement('li');
-  // console.log(taskInput.value);
   newTask.classList.add('task-item');
   taskList.appendChild(newTask);
   newTask.innerText = taskInput.value;
   saveOnLocalStorage(taskList);
   taskInput.value = '';
-  console.log(taskList.children);
-  console.log(newTask)
 }
 
 export function selectTask(event) {

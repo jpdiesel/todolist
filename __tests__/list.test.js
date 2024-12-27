@@ -1,15 +1,8 @@
-import { addNewTask } from "../scripts.js";
-import {
-  saveOnLocalStorage,
-} from "../utils/localStorage.js";
-
-jest.mock("../utils/localStorage.js", () => ({
-  saveOnLocalStorage: jest.fn(),
-  getFromLocalStorage: jest.fn(),
-  removeFromLocalStorage: jest.fn(),
-}));
+import { populateOnLoad } from "../scripts.js";
 
 describe("1 - Adicionar Tarefa e Salvar no localStorage", () => {
+  // Referências globais
+  let taskInput, createNewTask, taskList;
 
   beforeEach(() => {
     // Configurar o DOM simulado
@@ -22,22 +15,20 @@ describe("1 - Adicionar Tarefa e Salvar no localStorage", () => {
   `;
 
     // Redefinir referências globais
-    // createNewTask = document.getElementById("create-task");
-
-    // Inicializar a lista de tarefas
-    // createNewTask.addEventListener("click", addNewTask);
+    taskInput = document.getElementById("task-text");
+    createNewTask = document.getElementById("create-task");
+    taskList = document.getElementById("task-list");
 
     document.dispatchEvent(new Event("DOMContentLoaded"));
+
+    jest.spyOn(Storage.prototype, 'setItem');
+    jest.spyOn(Storage.prototype, 'getItem');
   });
 
   it("1.1 - Deve adicionar uma tarefa", () => {
-    const taskInput = document.getElementById("task-text");
-    const createNewTask = document.getElementById("create-task");
-    const taskList = document.getElementById("task-list");
-
     // Simular a entrada de texto no input
     taskInput.value = "Nova tarefa";
-    console.log('teste input',taskInput.value);
+  
     // Simular o clique no botão de adicionar tarefa
     createNewTask.click();
    
@@ -48,12 +39,17 @@ describe("1 - Adicionar Tarefa e Salvar no localStorage", () => {
 
   it("1.2 - Local storage é atualizado", () => {
     // Mockar o conteúdo salvo no localStorage
-    const taskInput = document.getElementById("task-text");
-    const taskList = document.getElementById("task-list");
     taskInput.value = "Tarefa a salvar";
 
-    addNewTask();
+    // Simular o clique no botão de adicionar tarefa
+    createNewTask.click();
 
-    expect(saveOnLocalStorage).toHaveBeenCalledWith(taskList);
+    // Verificar se o localStorage foi chamado
+    expect(localStorage.setItem).toHaveBeenCalled();
+    expect(localStorage.setItem).toHaveBeenCalledWith('tasks', taskList.innerHTML);
+
+    populateOnLoad();
+
+    expect(localStorage.getItem).toHaveBeenCalled();
   });
 });
