@@ -1,28 +1,31 @@
 <html>
   <head>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <title>To Do List</title>
   </head>
   <body>
     <header>
-      <h1>
-        Minha Lista de Tarefas 
-      </h1>
+      <h1>Minha Lista de Tarefas</h1>
     </header>
-    <p>
-      <h3>
-        Clique duas vezes em um item para marcá-lo como completo
-      </h3>
-     </p>
-     <input id="task-text" type="text">
-     <button id="create-task">Adicionar</button>
-     <button id="delete-all">Apagar Tudo</button>
-     <button id="suggest-task">Sugestão de Tarefa</button>
-     <ol id="task-list">
-     </ol>
-     <script type="module">
-      import { initializeTodoList } from './scripts.js';
-      document.addEventListener('DOMContentLoaded', initializeTodoList);
+    <h3>Clique duas vezes em um item para marcá-lo como completo</h3>
+    <section id="form-container">
+      <input id="task-text" type="text" />
+      <section id="buttons-container">
+        <button id="create-task">Adicionar</button>
+        <button id="suggest-task">Sugestão de Tarefa</button>
+        <button id="delete-all">Apagar Tudo</button>
+      </section>
+    </section>
+    <h3>Tarefas</h3>
+    <ol id="task-list">
+    </ol>
+    <script type="module">
+      // Estou utilizando o event listener aqui para garantir que tudo já tenha sido carregado no DOM
+      // antes de inicializar a lista de tarefas.
+      // Isso garante que as funções do arquivo scripts.js estarão disponíveis para uso nos testes.
+      // Essa solução foi sugerida pelo Tabnine.
+      import { initializeTodoList } from "./scripts.js";
+      document.addEventListener("DOMContentLoaded", initializeTodoList);
     </script>
   </body>
 </html>
