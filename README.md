@@ -2,6 +2,8 @@
 
 ## 0 - Sobre o projeto
 
+Esse projeto é uma lista de tarefas criado com HTML, CSS, Javascript e Jest. Neste projeto é possível adicionar, marcar como oompleta e remover uma ou mais tarefas. 
+
 ![Imagem do site](https://i.imgur.com/oKaGD2N.png)
 
 ## 1 - Instalando o projeto
